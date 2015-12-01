@@ -1330,6 +1330,49 @@ describe('reducer', () => {
       });
   });
 
+  it('should mark nested fields touched on touch', () => {
+    const state = reducer({
+      foo: {
+        myField: {
+          mySubField: {
+            value: 'initialValue'
+          }
+        },
+        myOtherField: {
+          value: 'otherInitialValue',
+          touched: true
+        },
+        _active: 'myOtherField',
+        _asyncValidating: false,
+        _error: undefined,
+        _submitting: false,
+        _submitFailed: false
+      }
+    }, {
+      ...touch('myField.mySubField'),
+      form: 'foo'
+    });
+    expect(state.foo)
+      .toEqual({
+        myField: {
+          mySubField: {
+            value: 'initialValue',
+            touched: true
+          }
+        },
+        myOtherField: {
+          value: 'otherInitialValue',
+          touched: true
+        },
+        _active: 'myOtherField',
+        _asyncValidating: false,
+        _error: undefined,
+        _submitting: false,
+        _submitFailed: false
+      });
+  });
+
+
   it('should unmark fields as touched on untouch', () => {
     const state = reducer({
       foo: {
